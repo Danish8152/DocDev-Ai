@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>DocDev AI</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="container">
+    <h1>DocDev AI</h1>
+    <p>Paste your code and get instant documentation</p>
+
+    <textarea id="codeInput" placeholder="Paste your code here..."></textarea>
+
+    <button onclick="generateDocs()">Generate Documentation</button>
+
+    <pre id="output"></pre>
+  </div>
+
+  <script>
+    async function generateDocs() {
+      const code = document.getElementById("codeInput").value;
+      const output = document.getElementById("output");
+
+      if (!code.trim()) {
+        output.textContent = "Please paste some code first.";
+        return;
+      }
+
+      output.textContent = "Generating documentation...";
+
+      const res = await fetch("http://localhost:5000/generate-docs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code })
+      });
+
+      const data = await res.json();
+      output.textContent = data.documentation;
+    }
+  </script>
+
+</body>
+</html>
